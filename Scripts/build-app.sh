@@ -34,11 +34,12 @@ mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$BIN_PATH/$EXECUTABLE" "$APP/Contents/MacOS/$EXECUTABLE"
 cp Resources/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
 
-# SwiftPM resource bundles (splash artwork) must sit next to the executable and in Resources,
-# so Bundle.module finds them however the app is launched.
+# SwiftPM resource bundles (splash artwork) go in Contents/Resources only. Bundle.module searches
+# the main bundle's resource path, so that is where it finds them. A copy next to the executable
+# also worked, but a .bundle inside Contents/MacOS is not a valid nested-code location and
+# codesign refuses the whole app for it: "bundle format unrecognized, invalid, or unsuitable".
 for bundle in "$BIN_PATH"/*.bundle; do
     [ -e "$bundle" ] || continue
-    cp -R "$bundle" "$APP/Contents/MacOS/"
     cp -R "$bundle" "$APP/Contents/Resources/"
 done
 
