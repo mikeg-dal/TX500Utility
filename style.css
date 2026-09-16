@@ -120,6 +120,23 @@ code {
   padding: 1px 5px; border-radius: 4px;
 }
 
+.dev-section {
+  margin-top: 36px; text-align: center;
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: 14px; padding: 22px 24px;
+}
+.dev-section h3 { margin: 0 0 8px; font-size: 1.05rem; }
+.dev-section p { margin: 0 auto 16px; max-width: 54ch; color: var(--muted); font-size: 0.9rem; }
+
+.issues-link {
+  display: inline-block; color: #fff; background: var(--accent);
+  text-decoration: none; font-size: 0.85rem; font-weight: 600;
+  padding: 9px 22px; border-radius: 8px;
+  transition: background 0.15s ease;
+}
+.issues-link:hover { background: #f04a4a; }
+.issues-icon { color: #4caf50; margin-right: 7px; font-size: 0.7rem; vertical-align: middle; }
+
 footer { margin-top: 40px; text-align: center; color: var(--muted); font-size: 0.82rem; }
 footer p { margin: 6px 0; }
 
