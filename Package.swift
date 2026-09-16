@@ -3,7 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "TX500Utility",
-    platforms: [.macOS(.v14)],
+    platforms: [.macOS("26.0")],
     products: [
         .library(name: "TX500Kit", targets: ["TX500Kit"]),
         .executable(name: "TX500Utility", targets: ["TX500Utility"]),

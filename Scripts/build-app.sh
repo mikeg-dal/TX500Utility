@@ -10,23 +10,32 @@ APP="$OUT_DIR/$APP_NAME.app"
 BUNDLE_ID="com.kf5o.tx500utility"
 EXECUTABLE="TX500Utility"
 
-# VERSION is the single source of truth for the shipped version number.
-VERSION="$(tr -d '[:space:]' < "VERSION")"
-if [ -z "$VERSION" ]; then
-    echo "VERSION file is empty" >&2
-    exit 1
-fi
-# The app falls back to a constant when run without a bundle (swift run), so the two must agree —
-# otherwise a build could ship labelled with the wrong version and nothing would notice.
-FALLBACK="$(sed -n 's/.*fallbackVersion = "\([^"]*\)".*/\1/p' "Sources/TX500Utility/App/TX500UtilityApp.swift")"
-if [ "$FALLBACK" != "$VERSION" ]; then
-    echo "Version mismatch: VERSION says '$VERSION', AppStrings.fallbackVersion says '$FALLBACK'" >&2
-    exit 1
+# The VERSION file is the default; CI overrides it with TX500_VERSION so the app inside a build
+# reports the same version the build is named after. Without this an untagged build was named
+# "main-<sha>" while the app inside it claimed to be the VERSION file's release number.
+if [ -n "${TX500_VERSION:-}" ]; then
+    VERSION="$TX500_VERSION"
+    echo "Version: $VERSION (from TX500_VERSION)"
+else
+    VERSION="$(tr -d '[:space:]' < "VERSION")"
+    if [ -z "$VERSION" ]; then
+        echo "VERSION file is empty" >&2
+        exit 1
+    fi
+    # Only checked for local builds. The app falls back to a constant when run without a bundle
+    # (swift run), and these two are edited by hand, so they are exactly the pair that drifts.
+    # Scripts/set-version.sh sets both at once.
+    FALLBACK="$(sed -n 's/.*fallbackVersion = "\([^"]*\)".*/\1/p' "Sources/TX500Utility/App/TX500UtilityApp.swift")"
+    if [ "$FALLBACK" != "$VERSION" ]; then
+        echo "Version mismatch: VERSION says '$VERSION', AppStrings.fallbackVersion says '$FALLBACK'." >&2
+        echo "Run Scripts/set-version.sh $VERSION to set both." >&2
+        exit 1
+    fi
 fi
 
 echo "Building release binary…"
-swift build -c release --product "$EXECUTABLE"
-BIN_PATH="$(swift build -c release --show-bin-path)"
+swift build -c release --arch arm64 --product "$EXECUTABLE"
+BIN_PATH="$(swift build -c release --arch arm64 --show-bin-path)"
 
 echo "Assembling ${APP}…"
 rm -rf "$APP"
@@ -56,7 +65,7 @@ cat > "$APP/Contents/Info.plist" <<PLIST
     <key>CFBundlePackageType</key><string>APPL</string>
     <key>CFBundleShortVersionString</key><string>$VERSION</string>
     <key>CFBundleVersion</key><string>$VERSION</string>
-    <key>LSMinimumSystemVersion</key><string>14.0</string>
+    <key>LSMinimumSystemVersion</key><string>26.0</string>
     <key>NSHighResolutionCapable</key><true/>
     <key>NSHumanReadableCopyright</key><string>An independent utility by Mike (KF5O). Not affiliated with or endorsed by Lab599. Lab599, TX-500 and the 599lab logo are their trademarks.</string>
 </dict>

@@ -24,7 +24,7 @@ taken by TRXSettings from the same radio minutes apart: identical.
 
 ## Requirements
 
-- macOS 14 or later
+- macOS 26 or later, on Apple Silicon. There is no Intel build.
 - A TX-500 CAT cable (FTDI FT232 or Prolific PL2303 — both use Apple's built-in drivers and appear
   as `/dev/cu.usbserial-*`)
 - The radio set to **LAB599** CAT protocol (menu 35). TS-2000 compatibility mode does not implement

@@ -21,7 +21,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: macos-15
+    runs-on: macos-26
     timeout-minutes: 45
     outputs:
       dmg: ${{ steps.dmg.outputs.name }}
@@ -35,6 +35,10 @@ jobs:
         run: swift test
 
       - name: Build the app bundle
+        env:
+          # So the app reports the same version the build is named after — "main-<sha>" for an
+          # untagged build, the tag for a release. Without it the DMG and the app disagreed.
+          TX500_VERSION: ${{ inputs.version }}
         run: ./Scripts/build-app.sh
 
       - name: Import the Developer ID certificate

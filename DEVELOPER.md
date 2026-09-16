@@ -15,7 +15,7 @@ swift run tx500 status          # CLI: talk to the radio from the terminal
 open Package.swift              # opens the package in Xcode
 ```
 
-Requirements: macOS 14+, Xcode 16+ (Swift 5.10 tools). The TX-500 CAT cable (FTDI FT232 or
+Requirements: macOS 26+ on Apple Silicon, with a matching Xcode. Intel is not supported and the app is built arm64-only. The TX-500 CAT cable (FTDI FT232 or
 Prolific PL2303) uses Apple's built-in drivers; it shows up as `/dev/cu.usbserial-*`.
 
 ## Layout
@@ -117,6 +117,25 @@ Preferences (⌘,) are defined in `AppPreferences`; add new keys there, bind wit
 - The loader erases the application firmware as soon as it accepts the 16-byte header. There is no
   "safe handshake test": after `OK` the radio boots into the loader until a full update completes.
 - An interrupted update is recoverable: the bootloader survives, so the update can simply be re-run.
+
+### Cutting a release
+The tag drives everything: the app bundle, the DMG name, the GitHub Release, the download page and
+its hash all follow from it.
+
+```bash
+Scripts/set-version.sh 0.9.1     # sets VERSION and AppStrings.fallbackVersion together
+git commit -am "Version 0.9.1"
+git push
+git tag v0.9.1 && git push origin v0.9.1
+```
+
+Bump *before* tagging, so the tagged commit's source already states the right version and a clone at
+that tag builds something that identifies itself correctly. `release.yml` re-checks the tag against
+`VERSION` and fails rather than publishing a mislabelled release.
+
+Untagged pushes to `main` build the same signed, notarised DMG as an Actions artifact, versioned
+`<branch>-<sha>` so a development build can never be mistaken for a release. CI passes that string to
+`build-app.sh` as `TX500_VERSION`, which overrides the `VERSION` file.
 
 ### Verified on hardware (2026-09-16, firmware 1.30.00)
 - **Backup** matches Lab599's own Windows TRXSettings tool byte for byte, same radio minutes apart.
