@@ -1,7 +1,14 @@
 {
-  "tag": "none",
-  "version": "0.0.0",
-  "date": "",
+  "tag": "v0.9.0",
+  "version": "0.9.0",
+  "date": "2026-09-16",
   "prerelease": true,
-  "assets": {}
+  "assets": {
+    "macos": {
+      "name": "TX500Utility-0.9.0-macos.dmg",
+      "url": "https://github.com/mikeg-dal/TX500Utility/releases/download/v0.9.0/TX500Utility-0.9.0-macos.dmg",
+      "size": "1.7M",
+      "sha256": "56a8ec7331430d0ec55bc20fd6b83c1edf368d87ec12a6554040b71d80fb5761"
+    }
+  }
 }
