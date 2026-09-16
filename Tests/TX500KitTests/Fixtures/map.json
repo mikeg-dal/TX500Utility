@@ -1,0 +1,690 @@
+{
+  "fields": {
+    "0x208": {
+      "after": 106,
+      "before": 10,
+      "confidence": "confirmed",
+      "kind": "panel",
+      "length": 1,
+      "mask": "0x60",
+      "name": "Filter preset (FIL1-4)",
+      "offset": 520
+    },
+    "0x20a": {
+      "after": 16,
+      "before": 80,
+      "bits": "6",
+      "confidence": "confirmed",
+      "length": 1,
+      "mask": "0x40",
+      "name": "18 AM/FM enabled",
+      "note": "Byte 6 of the VFO A band record (records are 16 bytes from 0x004; 0x204-0x213 is record 32 = VFO A). Menu 18 writes the flag into the record of the band you are on, so every band record has its own copy at record+6 bit 6 \u2014 not a single global setting.",
+      "offset": 522,
+      "per_band": true,
+      "shared": [
+        {
+          "after": 4,
+          "before": 0,
+          "mask": "0x04",
+          "name": "Preamp"
+        },
+        {
+          "after": 12,
+          "before": 0,
+          "mask": "0x0c",
+          "name": "Attenuator"
+        },
+        {
+          "after": 16,
+          "before": 0,
+          "mask": "0x10",
+          "name": "RIT"
+        },
+        {
+          "after": 32,
+          "before": 0,
+          "mask": "0x20",
+          "name": "XIT"
+        }
+      ],
+      "unit": "",
+      "verified": "2026-09-15"
+    },
+    "0x20c": {
+      "after": 61536,
+      "before": 470,
+      "confidence": "confirmed",
+      "kind": "panel",
+      "length": 2,
+      "name": "RIT/XIT offset",
+      "note": "Signed 16-bit LE in the band record (byte 8), so the offset is kept per band. Confirmed against the display: the radio read -4000 Hz and the bytes read 61536, which is -4000 in two's complement. CLR takes it to 0, moving only the low byte. RIT and XIT share this one offset, as the CAT IF frame does.",
+      "offset": 524,
+      "signed": true,
+      "unit": "Hz",
+      "verified": "2026-09-16"
+    },
+    "0x224": {
+      "after": 154,
+      "before": 138,
+      "confidence": "confirmed",
+      "length": 1,
+      "mask": "0x10",
+      "name": "22 TX meter",
+      "offset": 548,
+      "shared": [
+        {
+          "after": 42,
+          "before": 170,
+          "mask": "0x80",
+          "name": "Monitor mute"
+        },
+        {
+          "after": 42,
+          "before": 170,
+          "mask": "0x80",
+          "name": "Monitor"
+        },
+        {
+          "after": 169,
+          "before": 170,
+          "mask": "0x03",
+          "name": "Step size (VFO)"
+        }
+      ],
+      "unit": ""
+    },
+    "0x225": {
+      "after": 12,
+      "before": 44,
+      "confidence": "inferred",
+      "length": 1,
+      "mask": "0x20",
+      "name": "16 Notch filter type",
+      "offset": 549,
+      "shared": [
+        {
+          "after": 4,
+          "before": 12,
+          "mask": "0x08",
+          "name": "25 Encoder mode"
+        },
+        {
+          "after": 5,
+          "before": 4,
+          "mask": "0x01",
+          "name": "Split"
+        },
+        {
+          "after": 20,
+          "before": 4,
+          "mask": "0x10",
+          "name": "Lock"
+        }
+      ],
+      "unit": ""
+    },
+    "0x226": {
+      "after": 128,
+      "before": 192,
+      "confidence": "inferred",
+      "length": 1,
+      "mask": "0x40",
+      "name": "19 Tone type",
+      "note": "Packed byte: 19 Tone type is bit 6. The primary name here (21 Save band VFO) and an older CAT finding (speech compressor) are unverified bits of the same byte.",
+      "offset": 550,
+      "shared": [
+        {
+          "after": 144,
+          "before": 128,
+          "mask": "0x10",
+          "name": "21 Save band VFO"
+        },
+        {
+          "after": 148,
+          "before": 144,
+          "mask": "0x04",
+          "name": "Noise blanker"
+        },
+        {
+          "after": 146,
+          "before": 144,
+          "mask": "0x02",
+          "name": "Noise reduction"
+        },
+        {
+          "after": 145,
+          "before": 144,
+          "mask": "0x01",
+          "name": "Notch"
+        },
+        {
+          "after": 176,
+          "before": 144,
+          "mask": "0x20",
+          "name": "DSP IF set"
+        },
+        {
+          "after": 16,
+          "before": 144,
+          "mask": "0x80",
+          "name": "Compressor"
+        },
+        {
+          "after": 16,
+          "before": 144,
+          "mask": "0x80",
+          "name": "Speech compressor"
+        }
+      ],
+      "unit": ""
+    },
+    "0x227": {
+      "after": 132,
+      "before": 196,
+      "confidence": "inferred",
+      "length": 1,
+      "mask": "0x40",
+      "name": "14 CW decode RX",
+      "offset": 551,
+      "shared": [
+        {
+          "after": 4,
+          "before": 132,
+          "mask": "0x80",
+          "name": "14 CW decode TX"
+        },
+        {
+          "after": 4,
+          "before": 6,
+          "mask": "0x02",
+          "name": "28 Beep key"
+        },
+        {
+          "after": 0,
+          "before": 4,
+          "mask": "0x04",
+          "name": "31 Backlight"
+        },
+        {
+          "after": 32,
+          "before": 0,
+          "mask": "0x20",
+          "name": "33 Audio out"
+        }
+      ],
+      "unit": ""
+    },
+    "0x260": {
+      "confidence": "confirmed",
+      "length": 2,
+      "name": "10 CW pitch",
+      "offset": 608,
+      "unit": "Hz",
+      "verified": "2026-09-15"
+    },
+    "0x262": {
+      "confidence": "confirmed",
+      "length": 2,
+      "name": "11 CW speed",
+      "offset": 610,
+      "unit": "CPM",
+      "verified": "2026-09-15"
+    },
+    "0x264": {
+      "confidence": "confirmed",
+      "length": 2,
+      "name": "09 VOX delay MIC",
+      "offset": 612,
+      "unit": "ms",
+      "verified": "2026-09-15"
+    },
+    "0x266": {
+      "confidence": "confirmed",
+      "length": 2,
+      "name": "09 VOX delay CW",
+      "offset": 614,
+      "unit": "ms",
+      "verified": "2026-09-15"
+    },
+    "0x268": {
+      "confidence": "confirmed",
+      "length": 1,
+      "name": "08 VOX level MIC",
+      "offset": 616,
+      "unit": "",
+      "verified": "2026-09-15"
+    },
+    "0x269": {
+      "after": 50,
+      "before": 60,
+      "confidence": "confirmed",
+      "length": 1,
+      "mask": "0x0e",
+      "name": "17 EQ RX LF",
+      "offset": 617,
+      "unit": ""
+    },
+    "0x26a": {
+      "after": 60,
+      "before": 65,
+      "confidence": "confirmed",
+      "length": 1,
+      "mask": "0x7d",
+      "name": "17 EQ RX MF",
+      "offset": 618,
+      "unit": ""
+    },
+    "0x26b": {
+      "after": 50,
+      "before": 46,
+      "confidence": "confirmed",
+      "length": 1,
+      "mask": "0x1c",
+      "name": "17 EQ RX HF",
+      "offset": 619,
+      "unit": ""
+    },
+    "0x26c": {
+      "after": 90,
+      "before": 100,
+      "confidence": "confirmed",
+      "length": 1,
+      "mask": "0x3e",
+      "name": "17 EQ TX LF",
+      "offset": 620,
+      "unit": ""
+    },
+    "0x26d": {
+      "after": 90,
+      "before": 95,
+      "confidence": "confirmed",
+      "length": 1,
+      "mask": "0x05",
+      "name": "17 EQ TX MF",
+      "offset": 621,
+      "unit": ""
+    },
+    "0x26e": {
+      "after": 100,
+      "before": 98,
+      "confidence": "confirmed",
+      "length": 1,
+      "mask": "0x06",
+      "name": "17 EQ TX HF",
+      "offset": 622,
+      "unit": ""
+    },
+    "0x272": {
+      "confidence": "confirmed",
+      "length": 1,
+      "name": "03 Gain MIC",
+      "offset": 626,
+      "unit": "",
+      "verified": "2026-09-15"
+    },
+    "0x273": {
+      "confidence": "confirmed",
+      "length": 1,
+      "name": "03 Gain DIG",
+      "offset": 627,
+      "unit": "",
+      "verified": "2026-09-15"
+    },
+    "0x274": {
+      "confidence": "confirmed",
+      "length": 1,
+      "name": "04 CMR level",
+      "offset": 628,
+      "unit": "",
+      "verified": "2026-09-15"
+    },
+    "0x275": {
+      "confidence": "confirmed",
+      "length": 1,
+      "name": "00 Power",
+      "offset": 629,
+      "unit": "%",
+      "verified": "2026-09-15"
+    },
+    "0x276": {
+      "after": 34,
+      "before": 32,
+      "bits": "0-2",
+      "confidence": "confirmed",
+      "length": 1,
+      "mask": "0x02",
+      "name": "12 CW weight",
+      "note": "Packed byte: weight in bits 0-2, CW key flags above it. Bits 3 and 7 never moved.",
+      "offset": 630,
+      "shared": [
+        {
+          "after": 98,
+          "before": 34,
+          "mask": "0x40",
+          "name": "13 CW key TYPE (Auto/Single)"
+        },
+        {
+          "after": 114,
+          "before": 98,
+          "mask": "0x10",
+          "name": "13 CW key AUTO (Iambic A/B)"
+        },
+        {
+          "after": 82,
+          "before": 114,
+          "mask": "0x20",
+          "name": "13 CW key REV (Enable/Disable)"
+        }
+      ],
+      "unit": "",
+      "values": {
+        "0": "2:1",
+        "1": "2.5:1",
+        "2": "3:1",
+        "3": "3.5:1",
+        "4": "4:1",
+        "5": "4.5:1"
+      },
+      "verified": "2026-09-15"
+    },
+    "0x277": {
+      "confidence": "confirmed",
+      "length": 1,
+      "name": "01 AGC CW",
+      "offset": 631,
+      "unit": "",
+      "verified": "2026-09-15"
+    },
+    "0x278": {
+      "confidence": "confirmed",
+      "length": 1,
+      "name": "01 AGC SSB",
+      "offset": 632,
+      "unit": "",
+      "verified": "2026-09-15"
+    },
+    "0x279": {
+      "confidence": "confirmed",
+      "length": 1,
+      "name": "01 AGC AM",
+      "offset": 633,
+      "unit": "",
+      "verified": "2026-09-15"
+    },
+    "0x27a": {
+      "confidence": "confirmed",
+      "length": 1,
+      "name": "02 RF gain CW",
+      "offset": 634,
+      "unit": "",
+      "verified": "2026-09-15"
+    },
+    "0x27b": {
+      "confidence": "confirmed",
+      "length": 1,
+      "name": "02 RF gain SSB",
+      "offset": 635,
+      "unit": "",
+      "verified": "2026-09-15"
+    },
+    "0x27c": {
+      "confidence": "confirmed",
+      "length": 1,
+      "name": "02 RF gain DIG",
+      "offset": 636,
+      "unit": "",
+      "verified": "2026-09-15"
+    },
+    "0x27d": {
+      "confidence": "confirmed",
+      "length": 1,
+      "name": "02 RF gain AM",
+      "offset": 637,
+      "unit": "",
+      "verified": "2026-09-15"
+    },
+    "0x27e": {
+      "confidence": "confirmed",
+      "length": 1,
+      "name": "02 RF gain FM",
+      "offset": 638,
+      "unit": "",
+      "verified": "2026-09-15"
+    },
+    "0x27f": {
+      "confidence": "confirmed",
+      "length": 1,
+      "name": "07 SQL SSB/AM",
+      "offset": 639,
+      "unit": "",
+      "verified": "2026-09-15"
+    },
+    "0x280": {
+      "confidence": "confirmed",
+      "length": 1,
+      "name": "07 SQL FM",
+      "offset": 640,
+      "unit": "",
+      "verified": "2026-09-15"
+    },
+    "0x281": {
+      "confidence": "confirmed",
+      "length": 1,
+      "name": "05 NR level",
+      "offset": 641,
+      "unit": "",
+      "verified": "2026-09-15"
+    },
+    "0x282": {
+      "confidence": "confirmed",
+      "length": 1,
+      "name": "06 NB level",
+      "offset": 642,
+      "unit": "",
+      "verified": "2026-09-15"
+    },
+    "0x283": {
+      "after": 1,
+      "before": 0,
+      "cat": "AL",
+      "confidence": "confirmed",
+      "kind": "toggle",
+      "length": 1,
+      "mask": "0x01",
+      "name": "NF type",
+      "offset": 643
+    },
+    "0x284": {
+      "confidence": "confirmed",
+      "length": 1,
+      "name": "24 TX pan scale",
+      "offset": 644,
+      "unit": ""
+    },
+    "0x285": {
+      "confidence": "confirmed",
+      "length": 1,
+      "name": "24 TX pan shift",
+      "offset": 645,
+      "unit": ""
+    },
+    "0x286": {
+      "confidence": "inferred",
+      "length": 1,
+      "name": "24 TX pan average",
+      "offset": 646,
+      "unit": ""
+    },
+    "0x287": {
+      "confidence": "confirmed",
+      "length": 1,
+      "name": "23 RX pan scale",
+      "offset": 647,
+      "unit": ""
+    },
+    "0x288": {
+      "confidence": "confirmed",
+      "length": 1,
+      "name": "23 RX pan shift",
+      "offset": 648,
+      "unit": ""
+    },
+    "0x289": {
+      "confidence": "confirmed",
+      "length": 1,
+      "name": "23 RX pan average",
+      "offset": 649,
+      "unit": ""
+    },
+    "0x28a": {
+      "confidence": "confirmed",
+      "length": 1,
+      "name": "Last menu item shown",
+      "note": "menu cursor, not a setting",
+      "offset": 650,
+      "unit": ""
+    },
+    "0x28e": {
+      "after": 4,
+      "before": 0,
+      "confidence": "confirmed",
+      "kind": "panel",
+      "length": 1,
+      "mask": "0x04",
+      "name": "CW memory / CW Set",
+      "offset": 654
+    },
+    "0x290": {
+      "after": 1,
+      "before": 0,
+      "confidence": "confirmed",
+      "length": 1,
+      "mask": "0x01",
+      "name": "30 Clock correction (CORR TIME)",
+      "offset": 656,
+      "unit": ""
+    },
+    "0x292": {
+      "confidence": "confirmed",
+      "length": 2,
+      "name": "09 VOX delay DIG",
+      "offset": 658,
+      "unit": "ms",
+      "verified": "2026-09-15"
+    },
+    "0x294": {
+      "confidence": "confirmed",
+      "length": 1,
+      "name": "08 VOX level DIG",
+      "offset": 660,
+      "unit": "",
+      "verified": "2026-09-15"
+    },
+    "0x295": {
+      "after": 39,
+      "before": 46,
+      "confidence": "confirmed",
+      "length": 1,
+      "mask": "0x09",
+      "name": "32 Contrast",
+      "offset": 661,
+      "unit": ""
+    },
+    "0x296": {
+      "after": 3,
+      "before": 2,
+      "confidence": "confirmed",
+      "length": 1,
+      "mask": "0x01",
+      "name": "15 Beacon interval CW",
+      "offset": 662,
+      "unit": "s"
+    },
+    "0x298": {
+      "after": 5,
+      "before": 0,
+      "confidence": "confirmed",
+      "length": 1,
+      "mask": "0x05",
+      "name": "15 Beacon interval MIC",
+      "offset": 664,
+      "unit": "s"
+    },
+    "0x29a": {
+      "after": 5,
+      "before": 0,
+      "confidence": "confirmed",
+      "length": 1,
+      "mask": "0x05",
+      "name": "20 Freq ref correction",
+      "note": "Changed 0 -> 5 during the menu 18-23 pass; restore to 0. Likely 16-bit and signed (the correction can go either way) \u2014 confirm with a negative value.",
+      "offset": 666,
+      "unit": "Hz",
+      "verified": "2026-09-15"
+    },
+    "0x29c": {
+      "after": 22,
+      "before": 16,
+      "confidence": "confirmed",
+      "length": 1,
+      "mask": "0x06",
+      "name": "26 Alt encoder (RIT knob when RIT/XIT off)",
+      "offset": 668,
+      "shared": [
+        {
+          "after": 150,
+          "before": 22,
+          "mask": "0x80",
+          "name": "34 Audio in"
+        },
+        {
+          "after": 158,
+          "before": 150,
+          "mask": "0x08",
+          "name": "27 Select memory (what +/- and the encoder scroll)"
+        },
+        {
+          "after": 14,
+          "before": 30,
+          "mask": "0x10",
+          "name": "35 CAT protocol"
+        }
+      ],
+      "unit": ""
+    },
+    "0x2a4": {
+      "after": 20,
+      "before": 16,
+      "confidence": "confirmed",
+      "length": 1,
+      "mask": "0x04",
+      "name": "19 Tone PWR",
+      "offset": 676,
+      "unit": "%"
+    }
+  },
+  "firmware": "1.30.00",
+  "not_stored": {
+    "22 TX meter (RM) = 0": {
+      "checked": "2026-09-16"
+    },
+    "22 TX meter (RM) = 1": {
+      "checked": "2026-09-16"
+    },
+    "22 TX meter (RM) = 2": {
+      "checked": "2026-09-16"
+    },
+    "22 TX meter (RM) = 3": {
+      "checked": "2026-09-16"
+    },
+    "Filter preset (FIL1-4)": {
+      "checked": "2026-09-16"
+    },
+    "Memory channel (MC) = 002": {
+      "checked": "2026-09-16"
+    },
+    "Tone": {
+      "checked": "2026-09-16"
+    }
+  }
+}

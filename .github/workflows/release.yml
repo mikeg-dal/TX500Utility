@@ -1,0 +1,130 @@
+name: Release
+
+# Tagged releases: builds the signed, notarised DMG, publishes a GitHub Release, and updates the
+# download page on gh-pages.
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  version:
+    name: Check the tag against VERSION
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      version: ${{ steps.check.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: check
+        run: |
+          set -euo pipefail
+          TAG="${GITHUB_REF_NAME#v}"
+          VERSION="$(tr -d '[:space:]' < VERSION)"
+          # The app reads its version from the bundle, which build-app.sh fills from VERSION. If the
+          # tag disagreed, the Release would be named one thing and the app would report another.
+          if [ "$TAG" != "$VERSION" ]; then
+            echo "Tag v$TAG does not match VERSION ($VERSION). Update VERSION and AppStrings.fallbackVersion, or retag." >&2
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+  macos:
+    needs: version
+    uses: ./.github/workflows/_build-macos.yml
+    with:
+      version: ${{ needs.version.outputs.version }}
+    secrets: inherit
+
+  release:
+    name: Publish the release
+    needs: [version, macos]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: macos-dmg-${{ needs.version.outputs.version }}
+          path: artifacts
+
+      - name: Checksums
+        working-directory: artifacts
+        run: |
+          set -euo pipefail
+          sha256sum *.dmg > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            artifacts/*.dmg
+            artifacts/SHA256SUMS.txt
+          generate_release_notes: true
+          prerelease: ${{ contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta') || startsWith(needs.version.outputs.version, '0.') }}
+
+  pages:
+    name: Update the download page
+    needs: [version, macos, release]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: macos-dmg-${{ needs.version.outputs.version }}
+          path: artifacts
+
+      - name: Generate releases.json
+        env:
+          VERSION: ${{ needs.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          TAG="${GITHUB_REF_NAME}"
+          DMG="TX500Utility-${VERSION}-macos.dmg"
+          test -f "artifacts/$DMG" || { echo "expected asset missing: $DMG"; exit 1; }
+
+          # The DMG stays a Release asset and is only referenced by URL. Committing binaries to
+          # gh-pages would keep them in git history forever, so every clone would pay for every
+          # release ever shipped.
+          URL="https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG}/${DMG}"
+          SIZE=$(du -h "artifacts/$DMG" | cut -f1 | xargs)
+          HASH=$(sha256sum "artifacts/$DMG" | cut -d' ' -f1)
+
+          # jq rather than a heredoc: a hand-written template produces invalid JSON on one missing
+          # comma, and the page fails closed with no download at all.
+          jq -n --arg tag "$TAG" --arg version "$VERSION" --arg date "$(date -u +%Y-%m-%d)" \
+                --arg n "$DMG" --arg u "$URL" --arg s "$SIZE" --arg h "$HASH" \
+                --argjson prerelease "$(case "$VERSION" in 0.*|*alpha*|*beta*) echo true;; *) echo false;; esac)" \
+             '{tag: $tag, version: $version, date: $date, prerelease: $prerelease,
+               assets: {macos: {name: $n, url: $u, size: $s, sha256: $h}}}' > releases.json
+
+          jq -e '.assets.macos | has("name") and has("url") and has("size") and has("sha256")' releases.json > /dev/null
+          cat releases.json
+          rm -rf artifacts/
+
+      - name: Commit and push
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add releases.json
+          if git diff --cached --quiet; then
+            echo "releases.json unchanged"
+            exit 0
+          fi
+          git commit -m "Release ${GITHUB_REF_NAME}"
+          git push

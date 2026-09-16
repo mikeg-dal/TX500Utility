@@ -1,0 +1,40 @@
+name: Build
+
+# Untagged builds: produces the same signed, notarised DMG a release would ship, as an Actions
+# artifact, without creating a Release or touching gh-pages. Automatic on main, on demand elsewhere.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  version:
+    name: Derive version
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      version: ${{ steps.derive.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: derive
+        run: |
+          set -euo pipefail
+          # Untagged builds are identified by branch and commit, not by VERSION, so they can never
+          # be mistaken for a release.
+          BRANCH=$(echo "${GITHUB_REF_NAME}" | tr '/' '-')
+          echo "version=${BRANCH}-$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+
+  macos:
+    needs: version
+    uses: ./.github/workflows/_build-macos.yml
+    with:
+      version: ${{ needs.version.outputs.version }}
+    secrets: inherit

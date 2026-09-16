@@ -1,0 +1,33 @@
+name: CI
+
+# Fast feedback on every push and pull request: does it build, and do the tests pass?
+# Signing and packaging are deliberately not here — see build.yml.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Build and test
+    runs-on: macos-14
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - run: swift --version
+      - run: swift build
+      - run: swift test
+
+      - name: Check the app bundle assembles
+        # Also exercises the VERSION / AppStrings.fallbackVersion drift check, which is the thing
+        # that would otherwise ship a release labelled with the wrong version.
+        run: ./Scripts/build-app.sh
