@@ -34,6 +34,12 @@ header h1 { margin: 0; font-size: 2.6rem; letter-spacing: -0.02em; }
   font-size: 0.94rem;
 }
 
+.hero { margin: 0 0 24px; }
+.hero img {
+  width: 100%; height: auto; display: block;
+  border: 1px solid var(--border); border-radius: 12px;
+}
+
 .hero-description { color: var(--muted); margin-bottom: 28px; }
 
 .loading, .error { text-align: center; color: var(--muted); padding: 24px; }
@@ -47,27 +53,27 @@ header h1 { margin: 0; font-size: 2.6rem; letter-spacing: -0.02em; }
 .date { color: var(--muted); font-size: 0.9rem; }
 .release-notes-link { color: var(--muted); font-size: 0.9rem; }
 
-.cards { display: flex; justify-content: center; margin: 20px 0 8px; }
+.cards { display: flex; justify-content: center; margin: 24px 0 10px; }
 
 .card {
   display: block; text-align: center; text-decoration: none; color: inherit;
   background: var(--panel); border: 1px solid var(--border); border-radius: 14px;
-  padding: 28px 32px; min-width: 320px;
+  padding: 20px 28px 22px; min-width: 300px;
   transition: border-color 0.15s ease, transform 0.15s ease;
 }
 .card:hover { border-color: var(--accent); transform: translateY(-2px); }
-.card-icon { font-size: 2.4rem; line-height: 1; margin-bottom: 8px; }
-.card h2 { margin: 0 0 10px; font-size: 1.2rem; }
-.filename { margin: 0; font-size: 0.85rem; color: var(--muted); word-break: break-all; }
-.filesize { margin: 2px 0 14px; font-size: 0.85rem; color: var(--muted); }
+.card-icon { font-size: 1.7rem; line-height: 1; margin-bottom: 2px; }
+.card h2 { margin: 0 0 6px; font-size: 1.1rem; }
+.filename { margin: 0; font-size: 0.82rem; color: var(--muted); word-break: break-all; }
+.filesize { margin: 1px 0 12px; font-size: 0.82rem; color: var(--muted); }
 
 .btn {
   display: inline-block; background: var(--accent); color: #fff;
-  border-radius: 8px; padding: 9px 26px; font-weight: 600;
+  border-radius: 8px; padding: 8px 24px; font-weight: 600;
 }
 
 .hash {
-  margin: 14px 0 0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  margin: 12px 0 0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.68rem; color: var(--muted); word-break: break-all;
 }
 

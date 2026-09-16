@@ -18,6 +18,11 @@
       early. Back up your settings before restoring anything.
     </div>
 
+    <div class="hero">
+      <img src="images/hero.png" alt="TX500 Utility showing live frequency, S-meter and function state for a connected TX-500"
+           onerror="this.parentElement.hidden = true">
+    </div>
+
     <p class="hero-description">
       CAT control, memory channels, full settings backup and restore, clock sync and firmware
       updates &mdash; in one native Mac app. Backups are written in the same
@@ -96,6 +101,7 @@
         const resp = await fetch('releases.json');
         if (!resp.ok) throw new Error(resp.statusText);
         const rel = await resp.json();
+        if (!rel.assets || !rel.assets.macos) throw new Error('no release yet');
 
         const badge = document.getElementById('version-badge');
         badge.textContent = rel.tag;
