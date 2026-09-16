@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TX500 Utility — for the Lab599 Discovery TX-500</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <header>
+      <h1>TX500 Utility</h1>
+      <p class="tagline">A native macOS utility for the Lab599 Discovery TX-500</p>
+    </header>
+
+    <div class="beta-notice">
+      <strong>Pre-release</strong> &mdash; working and tested against a real radio, but still
+      early. Back up your settings before restoring anything.
+    </div>
+
+    <p class="hero-description">
+      CAT control, memory channels, full settings backup and restore, clock sync and firmware
+      updates &mdash; in one native Mac app. Backups are written in the same
+      <code>.set</code> format as Lab599's own TRXSettings, and have been verified byte-for-byte
+      against it.
+    </p>
+
+    <div id="loading" class="loading">Loading release info&hellip;</div>
+    <div id="error" class="error" hidden>No releases available yet. Check back soon.</div>
+
+    <div id="release-info" hidden>
+      <p class="version-line">
+        <span id="version-badge" class="badge"></span>
+        <span id="release-date" class="date"></span>
+        <a id="release-notes-link" class="release-notes-link" href="#" target="_blank" rel="noopener">Release notes</a>
+      </p>
+
+      <div class="cards">
+        <a id="card-macos" class="card" href="#">
+          <div class="card-icon">&#63743;</div>
+          <h2>macOS</h2>
+          <p class="filename" id="fn-macos"></p>
+          <p class="filesize" id="sz-macos"></p>
+          <span class="btn">Download</span>
+          <p class="hash" id="hash-macos"></p>
+        </a>
+      </div>
+      <p class="verify">
+        Verify what you downloaded: <code>shasum -a 256 &lt;file&gt;</code> and compare with the
+        hash above.
+      </p>
+    </div>
+
+    <div class="info-panels">
+      <div class="panel">
+        <h3>Requirements</h3>
+        <table class="req-table">
+          <tbody>
+            <tr><td class="req-platform">macOS</td><td>macOS 14 (Sonoma) or later</td></tr>
+            <tr><td class="req-platform">Cable</td><td>TX-500 CAT cable<br><span class="req-detail">FTDI FT232 or Prolific PL2303 — no driver needed</span></td></tr>
+            <tr><td class="req-platform">Radio</td><td>Menu 35 set to LAB599<br><span class="req-detail">TS-2000 mode cannot read or write settings</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <h3>What it does</h3>
+        <ul class="link-list">
+          <li>Live frequency, mode, S-meter and function state</li>
+          <li>All 100 memory channels, with <code>.mem</code> import and export</li>
+          <li>Settings backup, restore and a decoded viewer</li>
+          <li>Clock sync from the Mac</li>
+          <li>Firmware updates, with the steps spelled out</li>
+        </ul>
+        <h4>Links</h4>
+        <ul class="link-list">
+          <li><a href="https://github.com/mikeg-dal/TX500Utility" target="_blank" rel="noopener">Source on GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <footer>
+      <p>
+        Independent software by Mike (KF5O). <strong>Not affiliated with or endorsed by Lab599.</strong>
+        Lab599, TX-500 and the 599lab logo are their trademarks.
+      </p>
+      <p>Released under the GPL-3.0 licence.</p>
+    </footer>
+  </main>
+
+  <script>
+    // The page is static; everything version-specific comes from releases.json, which the release
+    // workflow rewrites on every tag. Nothing here needs editing to ship a new version.
+    (async () => {
+      try {
+        const resp = await fetch('releases.json');
+        if (!resp.ok) throw new Error(resp.statusText);
+        const rel = await resp.json();
+
+        const badge = document.getElementById('version-badge');
+        badge.textContent = rel.tag;
+        if (rel.prerelease) badge.classList.add('pre');
+
+        document.getElementById('release-date').textContent = rel.date;
+        document.getElementById('release-notes-link').href =
+          'https://github.com/mikeg-dal/TX500Utility/releases/tag/' + rel.tag;
+
+        for (const [platform, asset] of Object.entries(rel.assets)) {
+          const card = document.getElementById('card-' + platform);
+          if (!card) continue;
+          card.href = asset.url;
+          document.getElementById('fn-' + platform).textContent = asset.name;
+          document.getElementById('sz-' + platform).textContent = asset.size;
+          const hashEl = document.getElementById('hash-' + platform);
+          if (asset.sha256) {
+            hashEl.textContent = 'SHA256: ' + asset.sha256;
+            hashEl.title = asset.sha256;
+          }
+        }
+
+        document.getElementById('loading').hidden = true;
+        document.getElementById('release-info').hidden = false;
+      } catch (e) {
+        document.getElementById('loading').hidden = true;
+        document.getElementById('error').hidden = false;
+      }
+    })();
+  </script>
+</body>
+</html>
