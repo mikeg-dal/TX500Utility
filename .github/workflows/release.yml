@@ -51,6 +51,26 @@ jobs:
     permissions:
       contents: write
     steps:
+      - uses: actions/checkout@v4
+        with:
+          # git-cliff walks the whole history to build the notes, and is built on libgit2, which
+          # cannot lazily fetch what a shallow or partial clone left out.
+          fetch-depth: 0
+
+      - name: Install git-cliff
+        # Pinned so the notes format cannot change between releases without a deliberate bump.
+        run: |
+          set -euo pipefail
+          GC_VERSION=2.13.1
+          curl -sSL "https://github.com/orhun/git-cliff/releases/download/v${GC_VERSION}/git-cliff-${GC_VERSION}-x86_64-unknown-linux-gnu.tar.gz" | tar xz
+          sudo mv git-cliff-*/git-cliff /usr/local/bin/
+
+      - name: Generate release notes
+        run: |
+          set -euo pipefail
+          git-cliff --latest --strip header -o release_notes.md
+          cat release_notes.md
+
       - uses: actions/download-artifact@v4
         with:
           name: macos-dmg-${{ needs.version.outputs.version }}
@@ -68,7 +88,7 @@ jobs:
           files: |
             artifacts/*.dmg
             artifacts/SHA256SUMS.txt
-          generate_release_notes: true
+          body_path: release_notes.md
           prerelease: ${{ contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta') || startsWith(needs.version.outputs.version, '0.') }}
 
   pages:

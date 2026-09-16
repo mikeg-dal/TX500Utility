@@ -1,0 +1,53 @@
+# git-cliff configuration — release notes are generated from commit messages at tag time.
+# https://git-cliff.org/docs/configuration
+
+[changelog]
+header = """# Changelog
+
+Generated from commit messages at release time.
+"""
+body = """
+{%- if version %}
+## {{ version | trim_start_matches(pat="v") }} — {{ timestamp | date(format="%Y-%m-%d") }}
+{%- else %}
+## Unreleased
+{%- endif %}
+{% for group, commits in commits | group_by(attribute="group") %}
+### {{ group | striptags | trim | upper_first }}
+{% for commit in commits %}
+- {% if commit.scope %}**{{ commit.scope }}**: {% endif -%}
+{{ commit.message | split(pat="\n") | first | trim | upper_first }}
+{#- Subject line only. For commits without a conventional prefix, commit.message is the *whole*
+    message, and these run to several paragraphs of reasoning — right for a commit, wrong for
+    release notes, where it turned four commits into three pages. Anyone wanting the why can follow
+    the commit link. -#}
+{%- endfor %}
+{% endfor %}
+"""
+footer = ""
+trim = false
+
+[git]
+conventional_commits = true
+# Unconventional commits are kept, not dropped. This project's history is written as prose rather
+# than "fix:" prefixes, and filtering them out would produce empty release notes that look like
+# nothing changed. Anything without a recognised prefix lands under "Other changes".
+filter_unconventional = false
+split_commits = false
+commit_parsers = [
+  { message = "^feat", group = "Added" },
+  { message = "^fix", group = "Fixed" },
+  { message = "^refactor", group = "Changed" },
+  { message = "^perf", group = "Changed" },
+  { message = "^docs", skip = true },
+  { message = "^chore", skip = true },
+  { message = "^ci", skip = true },
+  { message = "^style", skip = true },
+  { message = "^test", skip = true },
+  { message = "^build", skip = true },
+  { message = "^Merge", skip = true },
+  { message = ".*", group = "Other changes" },
+]
+filter_commits = false
+tag_pattern = "v[0-9].*"
+sort_commits = "oldest"
