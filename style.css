@@ -79,6 +79,26 @@ header h1 { margin: 0; font-size: 2.6rem; letter-spacing: -0.02em; }
 
 .verify { text-align: center; color: var(--muted); font-size: 0.85rem; }
 
+.gallery-heading { margin: 40px 0 14px; font-size: 1.15rem; text-align: center; }
+
+/* Horizontal row that wraps rather than scrolls: three across on a desktop, two on a narrow
+   window, one on a phone. Each shot links to itself so the detail is readable full size. */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+.gallery figure { margin: 0; }
+.gallery img {
+  width: 100%; height: auto; display: block;
+  border: 1px solid var(--border); border-radius: 10px;
+  transition: border-color 0.15s ease;
+}
+.gallery a:hover img { border-color: var(--accent); }
+.gallery figcaption {
+  margin-top: 7px; font-size: 0.78rem; color: var(--muted); line-height: 1.45;
+}
+
 .info-panels { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 36px; }
 .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; }
 .panel h3 { margin: 0 0 12px; font-size: 1.05rem; }
@@ -104,6 +124,26 @@ footer { margin-top: 40px; text-align: center; color: var(--muted); font-size: 0
 footer p { margin: 6px 0; }
 
 @media (max-width: 640px) {
-  .info-panels { grid-template-columns: 1fr; }
+  .gallery-heading { margin: 40px 0 14px; font-size: 1.15rem; text-align: center; }
+
+/* Horizontal row that wraps rather than scrolls: three across on a desktop, two on a narrow
+   window, one on a phone. Each shot links to itself so the detail is readable full size. */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+.gallery figure { margin: 0; }
+.gallery img {
+  width: 100%; height: auto; display: block;
+  border: 1px solid var(--border); border-radius: 10px;
+  transition: border-color 0.15s ease;
+}
+.gallery a:hover img { border-color: var(--accent); }
+.gallery figcaption {
+  margin-top: 7px; font-size: 0.78rem; color: var(--muted); line-height: 1.45;
+}
+
+.info-panels { grid-template-columns: 1fr; }
   .card { min-width: 0; width: 100%; }
 }
