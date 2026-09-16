@@ -2,6 +2,7 @@ import SwiftUI
 
 /// Compact on/off indicator for a radio function (VOX, MON, NB…). Hidden state is shown dimmed, not removed,
 /// so the badge row keeps a stable layout.
+@MainActor
 struct FunctionBadge: View {
     let title: String
     let isOn: Bool?

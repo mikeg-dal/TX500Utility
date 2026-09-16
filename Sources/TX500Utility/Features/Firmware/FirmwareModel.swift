@@ -114,8 +114,13 @@ final class FirmwareModel {
         let activity = ProcessInfo.processInfo.beginActivity(
             options: [.userInitiated, .idleSystemSleepDisabled], reason: "Updating TX-500 firmware")
         defer { ProcessInfo.processInfo.endActivity(activity) }
-        let report: Bootloader.PhaseHandler = { [weak self] phase in
-            Task { @MainActor in self?.apply(phase) }
+        // The inner Task captures this closure rather than self: capturing a weak self across a
+        // concurrency boundary is rejected by older toolchains ("reference to captured var 'self'").
+        let onMain: @MainActor @Sendable (Bootloader.Phase) -> Void = { [weak self] phase in
+            self?.apply(phase)
+        }
+        let report: Bootloader.PhaseHandler = { phase in
+            Task { @MainActor in onMain(phase) }
         }
         do {
             try await withLoader(path: path) { try await $0.update(image: image, onPhase: report) }

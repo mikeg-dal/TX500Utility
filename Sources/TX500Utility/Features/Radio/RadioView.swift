@@ -2,6 +2,7 @@ import SwiftUI
 import TX500Kit
 
 /// Live front panel: frequency, mode, S-meter and the common controls.
+@MainActor
 struct RadioView: View {
     @Environment(RadioConnection.self) private var connection
     @State private var frequencyEntry = ""

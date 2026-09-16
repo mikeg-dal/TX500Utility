@@ -5,6 +5,7 @@ import SwiftUI
 /// When the connection dropped for a reason — the radio was switched off, say — that reason is
 /// shown here rather than the generic prompt, so every section explains itself without each one
 /// having to carry its own banner.
+@MainActor
 struct NotConnectedView: View {
     @Environment(RadioConnection.self) private var connection
     /// Overrides the default text; the failure reason still wins when there is one.

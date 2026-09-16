@@ -1,6 +1,7 @@
 import SwiftUI
 
 /// Colored dot + short label, used for connection state and RX/TX.
+@MainActor
 struct StatusBadge: View {
     let text: String
     let color: Color

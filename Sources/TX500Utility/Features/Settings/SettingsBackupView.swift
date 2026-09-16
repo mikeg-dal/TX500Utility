@@ -2,6 +2,7 @@ import SwiftUI
 import TX500Kit
 
 /// Settings Backups: one library of `.set` backups with the same actions on every row.
+@MainActor
 struct SettingsBackupView: View {
     @Environment(RadioConnection.self) private var connection
     @Environment(BackupStore.self) private var store

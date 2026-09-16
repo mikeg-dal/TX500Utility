@@ -2,6 +2,7 @@ import SwiftUI
 import TX500Kit
 
 /// Toolbar strip shown above every section: port picker, connect button, status.
+@MainActor
 struct ConnectionBar: View {
     @Environment(RadioConnection.self) private var connection
     @Environment(RadioLoader.self) private var loader

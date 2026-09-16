@@ -2,6 +2,7 @@ import SwiftUI
 
 /// The splash logo "filling with water": a dim copy of the logo is the empty glass, and the
 /// full-color logo shows through a gently waving water surface that rises with `progress` (0…1).
+@MainActor
 struct WaterFillLogo: View {
     /// 0 = empty, 1 = full.
     let progress: Double

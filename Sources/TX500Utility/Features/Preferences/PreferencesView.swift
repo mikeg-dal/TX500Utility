@@ -2,6 +2,7 @@ import SwiftUI
 import TX500Kit
 
 /// App preferences (⌘,). Not to be confused with the radio's own settings.
+@MainActor
 struct PreferencesView: View {
     @AppStorage(AppPreferences.Key.autoBackupPolicy) private var autoBackup = AppPreferences.defaultAutoBackupPolicy
     @AppStorage(AppPreferences.Key.showLoadingScreen) private var showLoadingScreen = AppPreferences.defaultShowLoadingScreen

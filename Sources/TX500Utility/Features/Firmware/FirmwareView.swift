@@ -1,6 +1,7 @@
 import SwiftUI
 import TX500Kit
 
+@MainActor
 struct FirmwareView: View {
     @Environment(RadioConnection.self) private var connection
     @Environment(RadioLoader.self) private var loader

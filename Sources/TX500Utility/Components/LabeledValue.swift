@@ -1,6 +1,7 @@
 import SwiftUI
 
 /// Small caption above a prominent value, e.g. "POWER / 10 W". Shows an em dash when the value is unknown.
+@MainActor
 struct LabeledValue: View {
     let label: String
     let value: String?

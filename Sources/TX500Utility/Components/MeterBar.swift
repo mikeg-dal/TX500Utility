@@ -1,6 +1,7 @@
 import SwiftUI
 
 /// Horizontal bar meter with green → yellow → red zones.
+@MainActor
 struct MeterBar: View {
     /// Current reading.
     let value: Double

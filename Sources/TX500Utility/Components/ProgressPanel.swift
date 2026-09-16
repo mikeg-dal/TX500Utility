@@ -10,6 +10,7 @@ struct OperationProgress: Equatable {
 }
 
 /// Progress bar with a title and "n of total" caption.
+@MainActor
 struct ProgressPanel: View {
     let progress: OperationProgress
 

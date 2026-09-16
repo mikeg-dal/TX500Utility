@@ -1,5 +1,6 @@
 import SwiftUI
 
+@MainActor
 struct RootView: View {
     @Environment(RadioLoader.self) private var loader
     @State private var selection: AppSection? = .radio

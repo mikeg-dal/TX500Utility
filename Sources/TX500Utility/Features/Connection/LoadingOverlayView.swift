@@ -1,6 +1,7 @@
 import SwiftUI
 
 /// Full-window loading screen shown after Connect while `RadioLoader` reads everything from the radio.
+@MainActor
 struct LoadingOverlayView: View {
     @Environment(RadioLoader.self) private var loader
 

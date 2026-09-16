@@ -2,6 +2,7 @@ import SwiftUI
 import TX500Kit
 
 /// Command probe table and a raw CAT console.
+@MainActor
 struct DiagnosticsView: View {
     @Environment(RadioConnection.self) private var connection
     @State private var probeRows: [ProbeRow] = []

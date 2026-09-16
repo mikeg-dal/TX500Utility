@@ -1,6 +1,7 @@
 import SwiftUI
 import TX500Kit
 
+@MainActor
 struct MemoriesView: View {
     @Environment(RadioConnection.self) private var connection
     @Environment(RadioLoader.self) private var loader
@@ -103,6 +104,7 @@ struct MemoriesView: View {
 }
 
 /// One editable grid row in the memory table.
+@MainActor
 private struct MemoryRow: View {
     @Binding var channel: MemoryChannel
     /// Shared with the table so an action elsewhere can end editing and force a commit.

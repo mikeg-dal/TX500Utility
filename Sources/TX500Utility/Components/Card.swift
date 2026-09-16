@@ -1,6 +1,7 @@
 import SwiftUI
 
 /// Rounded, bordered container used for every panel in the app.
+@MainActor
 struct Card<Content: View>: View {
     let title: String?
     @ViewBuilder let content: Content

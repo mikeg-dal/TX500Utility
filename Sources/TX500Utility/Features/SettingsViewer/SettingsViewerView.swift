@@ -2,6 +2,7 @@ import SwiftUI
 import TX500Kit
 
 /// Read-only, human-readable view of a settings backup: decoded fields and a spreadsheet of raw bytes.
+@MainActor
 struct SettingsViewerView: View {
     let request: SettingsViewerRequest
 

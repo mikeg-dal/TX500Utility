@@ -1,6 +1,7 @@
 import SwiftUI
 
 /// Inline, dismissible error message shown at the top of a feature view.
+@MainActor
 struct ErrorBanner: View {
     let message: String
     let onDismiss: () -> Void

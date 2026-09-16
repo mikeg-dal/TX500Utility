@@ -2,6 +2,7 @@ import SwiftUI
 import TX500Kit
 
 /// Sets the radio clock from the Mac (TM command; newer firmware only).
+@MainActor
 struct ClockView: View {
     @Environment(RadioConnection.self) private var connection
     @Environment(RadioLoader.self) private var loader

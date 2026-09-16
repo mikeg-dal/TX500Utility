@@ -2,6 +2,7 @@ import SwiftUI
 import TX500Kit
 
 /// One backup in the Settings Backups list. The same actions appear as buttons and in the context menu.
+@MainActor
 struct BackupRow: View {
     let entry: BackupStore.Entry
     let otherEntries: [BackupStore.Entry]
