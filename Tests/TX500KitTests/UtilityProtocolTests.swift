@@ -148,7 +148,7 @@ final class BootloaderTests: XCTestCase {
     func testRealFirmwareFileValidates() throws {
         let url = URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
-            .appendingPathComponent("mtrx1.30.00.fw")
+            .appendingPathComponent("firmware/mtrx1.30.00.fw")
         try XCTSkipUnless(FileManager.default.fileExists(atPath: url.path), "firmware file not present")
         let image = try FirmwareImage(contentsOf: url)
         XCTAssertEqual(image.data.count, 246_384)
